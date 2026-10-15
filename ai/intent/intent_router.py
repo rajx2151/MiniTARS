@@ -1,41 +1,160 @@
-def detect_intent(user_input):
-    user_input = user_input.lower().strip()
 
-    if any(word in user_input for word in ["hello", "hi", "hey"]):
-        return "GREETING"
+# ============================================================
+# MINITARS INTENT ROUTER
+# ============================================================
+#
+# Philosophy:
+#
+# Conversation -> GENERAL_CHAT
+# Robot/tool commands -> specific intent
+# Exit -> EXIT
+#
+# Greetings are NOT a separate intent.
+# Gemini handles greetings and casual conversation.
+# ============================================================
 
-    if any(word in user_input for word in [
-        "where is",
-        "location",
-        "department",
-        "faculty",
-        "hod",
-        "office"
-    ]):
-        return "COLLEGE_INFO"
 
-    if "weather" in user_input:
+# ============================================================
+# EXIT
+# ============================================================
+
+EXIT_WORDS = {
+    "exit",
+    "quit",
+    "shutdown",
+    "shut down",
+    "goodbye",
+}
+
+
+# ============================================================
+# ROBOT / TOOL KEYWORDS
+# ============================================================
+#
+# Keep this list focused on things MiniTARS can actually DO.
+#
+# Do NOT put "hello", "hi", "how are you", etc. here.
+# Those belong to GENERAL_CHAT.
+# ============================================================
+
+
+def detect_intent(user_text):
+
+    if not user_text:
+
+        return "GENERAL_CHAT"
+
+
+    text = user_text.lower().strip()
+
+
+    # ========================================================
+    # EXIT
+    # ========================================================
+
+    if text in EXIT_WORDS:
+
+        return "EXIT"
+
+
+    # ========================================================
+    # ROBOT / TOOL COMMANDS
+    # ========================================================
+    #
+    # IMPORTANT:
+    # These are examples.
+    # Keep/change them according to your actual tool_router.py.
+    # ========================================================
+
+
+    # --------------------------------------------------------
+    # TIME
+    # --------------------------------------------------------
+
+    if any(
+        phrase in text
+        for phrase in [
+            "what time is it",
+            "current time",
+            "tell me the time",
+            "time now",
+        ]
+    ):
+
+        return "TIME"
+
+
+    # --------------------------------------------------------
+    # WEATHER
+    # --------------------------------------------------------
+
+    if any(
+        phrase in text
+        for phrase in [
+            "weather",
+            "temperature outside",
+            "is it raining",
+            "will it rain",
+        ]
+    ):
+
         return "WEATHER"
 
-    if "photo" in user_input or "picture" in user_input:
-        return "TAKE_PHOTO"
 
-    if "record" in user_input or "video" in user_input:
-        return "RECORD_VIDEO"
+    # --------------------------------------------------------
+    # MUSIC
+    # --------------------------------------------------------
 
-    if "turn left" in user_input:
-        return "HEAD_LEFT"
+    if any(
+        phrase in text
+        for phrase in [
+            "play music",
+            "play a song",
+            "play song",
+            "start music",
+        ]
+    ):
 
-    if "turn right" in user_input:
-        return "HEAD_RIGHT"
+        return "MUSIC"
 
-    if "center" in user_input:
-        return "HEAD_CENTER"
 
-    if "wave" in user_input:
-        return "WAVE"
+    # --------------------------------------------------------
+    # STOP SPEAKING
+    # --------------------------------------------------------
 
-    if user_input in ["exit", "quit", "bye"]:
-        return "EXIT"
+    if any(
+        phrase in text
+        for phrase in [
+            "stop talking",
+            "stop speaking",
+            "be quiet",
+            "shut up",
+            "cancel speech",
+        ]
+    ):
+
+        return "STOP_SPEAKING"
+
+
+    # ========================================================
+    # EVERYTHING ELSE
+    # ========================================================
+    #
+    # This includes:
+    #
+    # hello
+    # hi
+    # hey
+    # how are you
+    # who are you
+    # tell me a joke
+    # that's funny
+    # continue
+    # what did you say
+    # explain that
+    # etc.
+    #
+    # Gemini handles these.
+    # ========================================================
 
     return "GENERAL_CHAT"
