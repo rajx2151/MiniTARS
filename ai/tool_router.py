@@ -1,8 +1,8 @@
 from tools.college_tool import get_college_information
 from tools.weather_tool import get_weather
 from tools.robot_tool import execute_robot_command
-from tools.camera_tool import take_photo, record_video
 from safety.robot_safety import validate_robot_command
+from tools.camera_tool import take_photo, record_video
 
 
 def execute_tool(intent, user_input):
@@ -30,4 +30,4 @@ def execute_tool(intent, user_input):
     elif intent == "RECORD_VIDEO":
         return record_video(40)
 
-    return None
+    return Nones
